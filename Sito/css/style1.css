@@ -11,7 +11,7 @@ body {
   justify-content: center;
   font-family: 'Roboto', sans-serif;
   padding: 0.5rem;
-  overflow: hidden; /* evita scroll sulla pagina, ma il container interno gestirà i contenuti */
+  overflow: hidden;
 }
 
 /* HEADER */
@@ -33,17 +33,6 @@ h2 {
   margin: 0;
 }
 
-/* DOMANDE */
-#question-text {
-  font-size: clamp(0.9rem, 2.5vw, 1.2rem);
-  font-family: 'Orbitron', sans-serif;
-  text-align: center;
-  color: #ffffff;
-  text-shadow: 0 0 8px #00eaff;
-  margin: 0;
-  padding: 0.2rem;
-}
-
 /* CONTAINER PRINCIPALE (GLASS EFFECT) */
 #parent-container {
   backdrop-filter: blur(15px);
@@ -59,8 +48,8 @@ h2 {
   flex-direction: column;
   padding: 0.6rem;
   gap: 0.4rem;
-  overflow-y: auto;  /* permette scroll solo se necessario, ma con le altezze giuste non servirà */
-  scrollbar-width: none; /* nasconde scrollbar (opzionale) */
+  overflow-y: auto;
+  scrollbar-width: none;
 }
 #parent-container::-webkit-scrollbar {
   display: none;
@@ -79,15 +68,74 @@ h2 {
   flex-shrink: 0;
 }
 
-/* CONTENITORE DOMANDE */
-#questions-container {
+/* GAME AREA - layout principale */
+#game-area {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+/* CONTAINER NUVOLA - posizionamento relativo per il testo */
+.cloud-container {
+  position: relative;
+  display: inline-block;
+  margin: 0.5rem auto;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.cloud-container:hover {
+  transform: scale(1.02);
+}
+
+/* IMMAGINE NUVOLA */
+.immagine-nuvola {
+  max-width: 280px;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 0 10px rgba(0, 234, 255, 0.5));
+}
+
+/* TESTO DENTRO LA NUVOLA */
+.question-inside-cloud {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+  text-align: center;
+  color: #0a2a2f;
+  font-weight: bold;
+  font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+  word-wrap: break-word;
+  padding: 0.5rem;
+  font-family: 'Orbitron', sans-serif;
+  text-shadow: none;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 0.5rem;
+  backdrop-filter: blur(2px);
+  box-shadow: 0 0 5px rgba(0, 234, 255, 0.3);
+}
+
+/* Nascondi il vecchio container domande */
+#questions-container {
+  display: none;
+}
+
+/* BUTTONS WRAPPER - nuovi bottoni sotto la nuvola */
+.buttons-wrapper {
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  gap: 1rem;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
   background: rgba(0, 0, 0, 0.3);
   border-radius: 0.8rem;
-  padding: 0.4rem;
-  flex-shrink: 0;
+  backdrop-filter: blur(5px);
 }
 
 /* GENIO - dimensione ridotta */
@@ -99,14 +147,23 @@ h2 {
   border-radius: 0.8rem;
   padding: 0.2rem;
   flex-shrink: 0;
+  margin-top: 0.5rem;
 }
-/* Riduzione effettiva dell'immagine o SVG dentro genie-container */
+
+/* Riduzione effettiva dell'immagine */
 #genie-container img,
 #genie-container svg {
   max-width: 100%;
-  max-height: 90px;  /* immagine più piccola */
+  max-height: 100px;
   width: auto;
   height: auto;
+  filter: drop-shadow(0 0 8px rgba(0, 234, 255, 0.6));
+  transition: all 0.3s ease;
+}
+
+#genie-container img:hover {
+  transform: scale(1.02);
+  filter: drop-shadow(0 0 15px rgba(0, 234, 255, 0.9));
 }
 
 /* FOOTER - ora ben visibile */
@@ -124,10 +181,39 @@ h2 {
   text-align: center;
   flex-shrink: 0;
   margin-top: 0.2rem;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+/* Link nel footer */
+.footer-links {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 0;
+}
+
+.footer-links li {
+  display: inline;
+}
+
+.footer-links a {
+  color: #00eaff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: clamp(0.6rem, 1.8vw, 0.8rem);
+}
+
+.footer-links a:hover {
+  color: #fff;
+  text-shadow: 0 0 5px #00eaff;
+  text-decoration: underline;
 }
 
 /* BOTTONI (STILE NEON) */
-button {
+.answer-btn, .reset-btn {
   cursor: pointer;
   border-radius: 2rem;
   border: 1px solid #00eaff;
@@ -136,29 +222,20 @@ button {
   font-family: 'Orbitron', sans-serif;
   font-weight: bold;
   transition: all 0.3s ease;
-  padding: 0.25rem 0.7rem;
-  font-size: clamp(0.7rem, 1.8vw, 0.9rem);
-  min-width: 55px;
+  padding: 0.5rem 1.2rem;
+  font-size: clamp(0.8rem, 2vw, 1rem);
+  min-width: 80px;
   backdrop-filter: blur(4px);
   animation: glow 2s infinite;
 }
 
 /* HOVER GENERALE */
-button:hover {
+.answer-btn:hover, .reset-btn:hover {
   background: #00eaff;
   color: #000;
   box-shadow: 0 0 12px #00eaff, 0 0 20px #00eaff;
-  transform: scale(1.03);
+  transform: scale(1.05);
   animation: none;
-}
-
-/* POSIZIONAMENTO BOTTONI (statico, in linea) */
-#yes-button, #no-button, #reset-button {
-  position: static;
-  width: auto;
-  height: auto;
-  margin: 0 0.2rem;
-  display: inline-block;
 }
 
 /* Stile specifico reset */
@@ -166,51 +243,110 @@ button:hover {
   background: rgba(255, 80, 120, 0.2);
   border-color: #ff6b8b;
   color: #ffb3c6;
+  animation: glowReset 2s infinite;
 }
+
 #reset-button:hover {
   background: #ff6b8b;
   color: #000;
   box-shadow: 0 0 12px #ff6b8b;
+  transform: scale(1.05);
+  animation: none;
 }
 
-/* ANIMAZIONE PULSAZIONE */
+/* ANIMAZIONI PULSAZIONE */
 @keyframes glow {
   0% { box-shadow: 0 0 3px #00eaff; }
   50% { box-shadow: 0 0 12px #00eaff; }
   100% { box-shadow: 0 0 3px #00eaff; }
 }
 
-/* Layout affiancato (genio + domanda) */
-#genie-container + #questions-container,
-#questions-container + #genie-container {
-  display: grid;
-  grid-template-columns: 0.7fr 1.3fr;
-  gap: 0.6rem;
-  align-items: center;
-  flex-shrink: 0;
+@keyframes glowReset {
+  0% { box-shadow: 0 0 3px #ff6b8b; }
+  50% { box-shadow: 0 0 12px #ff6b8b; }
+  100% { box-shadow: 0 0 3px #ff6b8b; }
 }
 
-/* MEDIA QUERY per schermi piccoli: colonna unica ma tutto visibile */
+/* Utility per screen reader */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* MEDIA QUERY per schermi piccoli */
 @media (max-width: 600px) {
   #parent-container {
     padding: 0.4rem;
     gap: 0.3rem;
   }
-  #genie-container + #questions-container,
-  #questions-container + #genie-container {
-    grid-template-columns: 1fr;
-    gap: 0.3rem;
+  
+  .immagine-nuvola {
+    max-width: 220px;
   }
+  
+  .question-inside-cloud {
+    width: 75%;
+    font-size: 0.8rem;
+    padding: 0.3rem;
+  }
+  
+  .buttons-wrapper {
+    gap: 0.5rem;
+    padding: 0.3rem;
+  }
+  
+  .answer-btn, .reset-btn {
+    padding: 0.3rem 0.8rem;
+    min-width: 60px;
+    font-size: 0.8rem;
+  }
+  
   #genie-container img,
   #genie-container svg {
     max-height: 75px;
   }
-  button {
-    padding: 0.2rem 0.5rem;
-    min-width: 45px;
-  }
+  
   #footer {
     padding: 0.3rem;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
   }
+  
+  .footer-links {
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+}
+
+/* MEDIA QUERY per tablet */
+@media (min-width: 601px) and (max-width: 900px) {
+  .immagine-nuvola {
+    max-width: 250px;
+  }
+  
+  .question-inside-cloud {
+    font-size: 1rem;
+  }
+  
+  .answer-btn, .reset-btn {
+    padding: 0.4rem 1rem;
+    min-width: 70px;
+  }
+}
+
+/* Animazione di caricamento per la nuvola */
+@keyframes cloudFloat {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0px); }
+}
+
+.cloud-container {
+  animation: cloudFloat 3s ease-in-out infinite;
 }
