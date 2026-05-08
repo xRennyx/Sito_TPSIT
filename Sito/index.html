@@ -1,30 +1,70 @@
-<html>
-    <head>
-        <meta charset=utf-8 />
-        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-        <link href="css/style1.css" rel="stylesheet" type="text/css">
-        <title> Akinator </title>
-         <script src="js/script.js"></script>
-         <script src="json/characters.js"></script>
-         <script src="json/questions.js"></script>
-    </head>
-    <body>
-        <div id="parent-container">
-            <div id="header">
-                <h1>Akinator</h1>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+    <meta name="description" content="Akinator - Il genio che indovina il personaggio a cui stai pensando">
+    <meta name="author" content="Poli Alessio, Redi Giacomo, Renesto Francesco">
+    <link href="css/style1.css" rel="stylesheet" type="text/css">
+    <title>Akinator - Il genio delle domande</title>
+    <!-- Preload immagini importanti per performance -->
+    <link rel="preload" href="img/idle-genie.png" as="image">
+    <link rel="preload" href="img/nuvolapensiero.png" as="image">
+    <!-- Script caricati in modo non bloccante -->
+    <script src="json/questions.js" defer></script>
+    <script src="json/characters.js" defer></script>
+    <script src="js/script.js" defer></script>
+</head>
+<body>
+    <div id="parent-container">
+        <header id="header">
+            <h1>Akinator</h1>
+            <p class="sr-only">Gioco in cui il genio indovina il personaggio a cui stai pensando</p>
+        </header>
+
+        <main>
+            <div id="game-area">
+                <!-- Nuvola con domanda all'interno -->
+                <div class="cloud-container">
+                    <img class="immagine-nuvola" src="img/nuvolapensiero.png" alt="Nuvola di pensiero del genio">
+                    <div id="question-text" class="question-inside-cloud">
+                        Pensa a un personaggio...
+                    </div>
+                </div>
+
+                <!-- Pulsanti di risposta -->
+                <div class="buttons-wrapper">
+                    <button id="yes-button" class="answer-btn btn-yes" aria-label="Rispondi Sì">
+                        <span class="btn-text">✅ Sì</span>
+                    </button>
+                    <button id="no-button" class="answer-btn btn-no" aria-label="Rispondi No">
+                        <span class="btn-text">❌ No</span>
+                    </button>
+                    <button id="reset-button" class="reset-btn" style="display: none;" aria-label="Ricominciare il gioco">
+                        <span class="btn-text">🔄 Gioca di nuovo</span>
+                    </button>
+                </div>
+
+                <!-- Genio -->
+                <figure id="genie-container">
+                    <img id="genie-image" 
+                         src="img/idle-genie.png" 
+                         alt="Genio di Akinator" 
+                         loading="eager">
+                    <figcaption class="sr-only">Il genio che ti interroga</figcaption>
+                </figure>
             </div>
-            <img class="immagine-nuvola" src="img/nuvolapensiero.png">
-            <div id="questions-container">
-                <h3 id="question-text"></h3>
-                <button id="yes-button"><h2>Sì</h2></button>
-                <button id="no-button"><h2>No</h2></button>
-                <br>
-                <button id="reset-button" style="display: none;"><h2>Gioca di nuovo</h2></button>
-            </div>
-            <div id="genie-container">
-               <img id="genie-image" src="img/idle-genie.png" height="95%">
-            </div>
-            <div id="footer"><p>Progetto realizzato dagli studenti: Poli Alessio - Redi Giacomo - Renesto Francesco.</p>    &nbsp;&nbsp; ― &nbsp;&nbsp;<a href="docs/Personaggi.pdf" target="_blank">Lista dei personaggi</a>&nbsp;&nbsp; ― &nbsp;&nbsp;<a href="manuale_utente.pdf" target="_blank">Documentazione (manuale utente)</a></div>
-        </div>
-    </body>
+        </main>
+
+        <footer id="footer">
+            <p>Progetto realizzato dagli studenti: Poli Alessio - Redi Giacomo - Renesto Francesco.</p>
+            <nav aria-label="Link di documentazione">
+                <ul class="footer-links">
+                    <li><a href="docs/Personaggi.pdf" target="_blank" rel="noopener noreferrer">Lista dei personaggi</a></li>
+                    <li><a href="manuale_utente.pdf" target="_blank" rel="noopener noreferrer">Manuale utente</a></li>
+                </ul>
+            </nav>
+        </footer>
+    </div>
+</body>
 </html>
